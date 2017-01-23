@@ -6,4 +6,5 @@ Implementation-Vendor-Id: com.qcm
 Build-Jdk: 1.6.0_13
 Built-By: JobQ
 Created-By: Maven Integration for Eclipse
+Implementation-URL: http://maven.apache.org
 

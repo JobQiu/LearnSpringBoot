@@ -1,16 +1,27 @@
 package com.qcm.learnSB13;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.qcm.learnSB13.dao.UserMapper;
-import com.qcm.learnSB13.entity.User;
+import com.google.gson.Gson;
+import com.qcm.learnSB13.dao.HighFrequencyMapper;
+import com.qcm.learnSB13.dao.WaitSynonymMapper;
+import com.qcm.learnSB13.dao.WordMapper;
+import com.qcm.learnSB13.entity.Word;
+import com.qcm.learnSB13.service.HighFrequencyService;
+import com.qcm.learnSB13.service.WordService;
+import com.qcm.learnSB13.util.DateUtil;
+import com.qcm.learnSB13.util.WordUtil;
 
 /**
- * 
  * @author Congmin Qiu 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -18,8 +29,57 @@ import com.qcm.learnSB13.entity.User;
 public class ApplicationTests {
 
 	@Autowired
-	UserMapper userMapper;
+	WordMapper wordMapper;
+	@Autowired
+	WordService wordService;
+	@Autowired
+	HighFrequencyMapper highFrequencyMapper;
+	@Autowired
+	HighFrequencyService highFrequencyService;
+	@Autowired
+	WaitSynonymMapper waitSynonymMapper;
+	public static final Gson g = new Gson();
 
+	@Test
+	public void testWaitS() {
+
+		waitSynonymMapper.deleteByWord("test");
+		waitSynonymMapper.insertByWaitSynonym("tteesstt");
+		Set<String> words = waitSynonymMapper.getAllWaitSynonym();
+		for (String string : words) {
+			System.out.println(string);
+		}
+	}
+
+	@Ignore
+	@Test
+	public void testExisted() {
+		System.out.println(highFrequencyMapper.isExisted("thu"));
+		System.out.println(highFrequencyService.isHighFrequency("thus"));
+		System.out.println(highFrequencyService.isHighFrequency("thu"));
+	}
+
+	@Ignore
+	@Test
+	public void testSentence() {
+		String sentence = "you are such deem a stu-pid guy, but excel i don't radical like you";
+		List<String> temp = WordUtil.sentence2WordsList(sentence);
+		for (String string : temp) {
+			System.out.println(string + "\t"
+					+ wordService.getSynonymSet(string));
+		}
+	}
+
+	@Ignore
+	@Test
+	public void testSynonyms() {
+		Word word = wordMapper.findByWord("radical");
+		System.out.println(g.toJson(word));
+		System.out
+				.println(word.getWord() + ":" + WordUtil.getSynonymList(word));
+	}
+
+	@Ignore
 	@Test
 	public void findByName() {
 
@@ -37,9 +97,18 @@ public class ApplicationTests {
 		// user.setName("cmq");
 		// userMapper.insertByUser(user);
 
-		for (User u : userMapper.findAll()) {
-			System.out.println(u.getId() + "->" + u.getName() + ":"
-					+ u.getAge());
+		List<Word> results = wordMapper.findByUsedNumber(-2);
+		Gson gson = new Gson();
+		for (Word word : results) {
+			System.out.print(DateUtil.string2Date(word.getDate()) + "-----");
+			System.out.println(gson.toJson(word));
 		}
+		Word word = wordMapper.findByWord("dominant");
+
+		System.out.print(DateUtil.string2Date(word.getDate()) + "-----");
+		System.out.println(gson.toJson(word));
+
+		Date date = new Date();
+		System.out.println(date.getTime());
 	}
 }

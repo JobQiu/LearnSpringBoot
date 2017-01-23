@@ -10,10 +10,19 @@ public class User {
 	private Long id;
 	private String name;
 	private Integer age;
+	private Department department;
 
 
 	public Long getId() {
 		return id;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 
 	public void setId(Long id) {

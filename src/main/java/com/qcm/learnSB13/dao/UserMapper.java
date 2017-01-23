@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -16,7 +15,7 @@ import com.qcm.learnSB13.entity.User;
  * 
  * @author Congmin Qiu 
  */
-@Mapper
+// @Mapper
 public interface UserMapper {
 	@Select("SELECT * FROM USER WHERE NAME = #{name}")
 	User findByName(@Param("name") String name);
@@ -30,10 +29,9 @@ public interface UserMapper {
 	@Insert("INSERT INTO USER(NAME, AGE) VALUES(#{name}, #{age})")
 	int insertByUser(User user);
 
-	@Results({
- @Result(property = "id", column = "id"),
+	@Results({ @Result(property = "id", column = "id"),
 			@Result(property = "name", column = "name"),
 			@Result(property = "age", column = "age") })
-	@Select("SELECT id,name, age FROM user")
+	@Select("SELECT id,name,age FROM user")
 	List<User> findAll();
 }
