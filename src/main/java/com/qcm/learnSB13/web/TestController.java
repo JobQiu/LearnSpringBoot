@@ -35,4 +35,13 @@ public class TestController {
 		System.out.println(sentence);
 		return "index";
 	}
+
+	@RequestMapping("/review")
+	public ModelAndView review() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("words", wordMapper.findByUsedNumber(1));
+		modelAndView.setViewName("review");
+		return modelAndView;
+	}
+
 }

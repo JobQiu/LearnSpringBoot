@@ -22,4 +22,9 @@ public class ResultController {
 	public Map<String, Set<String>> result(String sentence) {
 		return sentenceService.getSynonymsBySentence(sentence);
 	}
+
+	@RequestMapping("/inputReview")
+	public String inputReview(String word) {
+		return word;
+	}
 }

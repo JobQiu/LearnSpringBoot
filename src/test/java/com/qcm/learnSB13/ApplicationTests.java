@@ -9,13 +9,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.gson.Gson;
 import com.qcm.learnSB13.dao.HighFrequencyMapper;
+import com.qcm.learnSB13.dao.ReviewVocabularyRepository;
 import com.qcm.learnSB13.dao.WaitSynonymMapper;
 import com.qcm.learnSB13.dao.WordMapper;
+import com.qcm.learnSB13.entity.ReviewVocabulary;
 import com.qcm.learnSB13.entity.Word;
 import com.qcm.learnSB13.service.HighFrequencyService;
 import com.qcm.learnSB13.service.WordService;
@@ -25,6 +29,7 @@ import com.qcm.learnSB13.util.WordUtil;
 /**
  * @author Congmin Qiu 
  */
+@SuppressWarnings("deprecation")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 public class ApplicationTests {
@@ -39,11 +44,29 @@ public class ApplicationTests {
 	HighFrequencyService highFrequencyService;
 	@Autowired
 	WaitSynonymMapper waitSynonymMapper;
+	@Autowired
+	ReviewVocabularyRepository repository;
+
 	public static final Gson g = new Gson();
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
+	@Test
+	public void test222() {
+		System.out.println(repository.countByWord("test"));
+		ReviewVocabulary reviewVocabulary = new ReviewVocabulary();
+		reviewVocabulary.setWord("gee");
+		reviewVocabulary.setGmtModified(new Date());
+		reviewVocabulary.setStatus(1);
+		// System.out.println(g.toJson(repository.saveAndFlush(reviewVocabulary)));
+
+		Page<ReviewVocabulary> test = repository.findByStatus(1,
+				new PageRequest(0, 5));
+		System.out.println(test.getContent().size());
+	}
+
+	@Ignore
 	@Test
 	public void test() throws Exception {
 		// 保存字符串
